@@ -10,12 +10,15 @@ class Panel
         void add(Object* object);
         void drawLine();
         void drawPoint();
+        void drawCircle();
         void run(double mouseX, double mouseY);
         void mouseClick(double mouseX, double mouseY, int button, int action);
         void transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y);
         void keyPressed(int key, int action);
-        enum State {PANEL_LINE_WAIT,PANEL_LINE_FIRST,PANEL_LINE_END,Panel_NORMAL,
-                    PANEL_POINT_START,PANEL_POINT_WAIT};
+        enum State {PANEL_NORMAL,
+                    PANEL_LINE_WAIT, PANEL_LINE_START,
+                    PANEL_POINT_START, PANEL_POINT_WAIT,
+                    PANEL_CIRCLE_WAIT, PANEL_CIRCLE_START};
         State state = PANEL_POINT_WAIT;
     private:
         std::list<Object*> objects;

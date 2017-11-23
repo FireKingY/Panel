@@ -25,7 +25,7 @@ void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY);
 
 int main()
 {
-    Oval c = Oval(0.0f,0.0f,0.3f,0.4f);
+    // Oval c = Oval(0.0f,0.0f,0.3f,0.4f);
     Panel panel(width, height);
     curPanel = &panel;
     
@@ -38,7 +38,7 @@ int main()
     GLFWwindow* window = glfwCreateWindow(width, height, "FirePanel", NULL, NULL);
     if(window == NULL)
     {
-        std::cout<<"´´½¨´°¿ÚÊ§°Ü"<<std::endl;
+        std::cout<<"åˆ›å»ºçª—å£å¤±è´¥"<<std::endl;
         return -1;
     }
 
@@ -59,7 +59,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         // glColor3f(1.0f, 0.0f, 0.0f);
         curPanel->drawObjs();
-        c.draw();
+        // c.draw();
         // panel.run();
        
 
@@ -86,23 +86,23 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-//key:°´¼ü scancode:É¨ÃèÂë  
-//action:×´Ì¬  mods:¹¦ÄÜ¼üctrl¡¢shiftµÈ
+//key:æŒ‰é”® scancode:æ‰«æç   
+//action:çŠ¶æ€  mods:åŠŸèƒ½é”®ctrlã€shiftç­‰
     curPanel->keyPressed(key, action);
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
-//Êó±ê°´¼ü´¦Àíº¯Êı
+//é¼ æ ‡æŒ‰é”®å¤„ç†å‡½æ•°
 void mouse_press_event(GLFWwindow* window, int button, int action, int mods)
 {
     double mouseX, mouseY;
-    //»ñÈ¡Êó±êµ±Ç°·½Î»
+    //è·å–é¼ æ ‡å½“å‰æ–¹ä½
     glfwGetCursorPos(window,&mouseX,&mouseY);
 
     curPanel->mouseClick(mouseX, mouseY, button, action);
     
-    //Êó±ê×ó¼ü°´ÏÂ×´Ì¬¼ì²â
+    //é¼ æ ‡å·¦é”®æŒ‰ä¸‹çŠ¶æ€æ£€æµ‹
     if(button==0 && action==1)
     {
         cout<<mouseX<<" "<<mouseY<<endl;
