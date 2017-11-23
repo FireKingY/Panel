@@ -4,6 +4,7 @@
 #include<list>
 #include "Line.h"
 #include "Panel.h"
+#include "Oval.h"
 using namespace std;
 
 int width = 800; 
@@ -24,6 +25,7 @@ void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY);
 
 int main()
 {
+    Oval c = Oval(0.0f,0.0f,0.3f,0.4f);
     Panel panel(width, height);
     curPanel = &panel;
     
@@ -41,6 +43,7 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
+    // glViewport(0,0,width,height);    
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_press_event);
@@ -56,6 +59,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         // glColor3f(1.0f, 0.0f, 0.0f);
         curPanel->drawObjs();
+        c.draw();
         // panel.run();
        
 
