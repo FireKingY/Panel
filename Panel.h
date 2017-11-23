@@ -1,5 +1,6 @@
 #pragma once
 #include<list>
+#include<stack>
 #include "Object.h"
 
 class Panel
@@ -10,7 +11,8 @@ class Panel
         void add(Object* object);
         void drawLine();
         void drawPoint();
-        void drawCircle();
+        void drawOval();
+        void drawPoly();
         void run(double mouseX, double mouseY);
         void mouseClick(double mouseX, double mouseY, int button, int action);
         void transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y);
@@ -18,10 +20,13 @@ class Panel
         enum State {PANEL_NORMAL,
                     PANEL_LINE_WAIT, PANEL_LINE_START,
                     PANEL_POINT_START, PANEL_POINT_WAIT,
-                    PANEL_CIRCLE_WAIT, PANEL_CIRCLE_START};
+                    PANEL_CIRCLE_WAIT, PANEL_CIRCLE_START,
+                    PANEL_OVAL_WAIT, PANEL_OVAL_START,
+                    PANEL_REGLUAR_POLYGON_WAIT, PANEL_REGLUAR_POLYGON_START};
         State state = PANEL_POINT_WAIT;
     private:
         std::list<Object*> objects;
+        std::stack<int> inputs;
         double mouseX,mouseY;
         int width;
         int height;

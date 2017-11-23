@@ -5,10 +5,11 @@
 #include "Line.h"
 #include "Panel.h"
 #include "Oval.h"
+#include "RegluarPolygon.h"
 using namespace std;
 
 int width = 800; 
-int height = 600;
+int height = 800;
 float vertices[] = {
     -0.5f, -0.5f, 0.0f,
      0.5f, -0.5f, 0.0f,
@@ -26,6 +27,7 @@ void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY);
 int main()
 {
     // Oval c = Oval(0.0f,0.0f,0.3f,0.4f);
+    // RegluarPolygon py(4,0.3f);
     Panel panel(width, height);
     curPanel = &panel;
     
@@ -61,7 +63,7 @@ int main()
         curPanel->drawObjs();
         // c.draw();
         // panel.run();
-       
+    //    py.draw();
 
         //swapBuffer
         glfwSwapBuffers(window);

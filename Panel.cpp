@@ -1,6 +1,7 @@
 #include "Panel.h"
 #include "Line.h"
 #include "Point.h"
+#include "RegluarPolygon.h"
 #include "Oval.h"
 #include <iostream>
 #include <cmath>
@@ -75,7 +76,7 @@ void Panel::drawPoint()
     }
 }
 
-void Panel::drawCircle()
+void Panel::drawOval()
 {
     static Oval* o;
     static GLfloat x;
@@ -92,11 +93,11 @@ void Panel::drawCircle()
         Oy = mouseY;
         transfer(Ox, Oy, x, y);
         o = new Oval(x, y, 0, 0);
-        std::cout<<x<<" "<<y<<std::endl;
+        // std::cout<<x<<" "<<y<<std::endl;
 
         add(o);
         state = PANEL_CIRCLE_START;
-        std::cout<<x<<" "<<y<<std::endl;
+        // std::cout<<x<<" "<<y<<std::endl;
 
     }
     else if(state == PANEL_CIRCLE_START)
@@ -107,7 +108,54 @@ void Panel::drawCircle()
         o->setAB(a, b);
         
     }
+
+     else if(state == PANEL_OVAL_WAIT)
+     {
+        // cout<<"";
+
+        // Ox = mouseX;
+        // Oy = mouseY;
+        // transfer(Ox, Oy, x, y);
+        // o = new Oval(x, y, 0, 0);
+        // // std::cout<<x<<" "<<y<<std::endl;
+
+        // add(o);
+        // state = PANEL_OVAL_START;
+        // // std::cout<<x<<" "<<y<<std::endl;
+     }
+     else if(state == PANEL_OVAL_START)
+     {
+        
+     }
     
+}
+
+void Panel::drawPoly()
+{
+    static RegluarPolygon* py;
+    static GLfloat x;
+    static GLfloat y;
+    static GLfloat r;
+    static GLfloat a;
+    static GLfloat b;
+    static double Ox;
+    static double Oy;
+    if(state == PANEL_REGLUAR_POLYGON_WAIT)
+    {
+        Ox = mouseX;
+        Oy = mouseY;
+        transfer(mouseX, mouseY, x, y);
+        py = new RegluarPolygon(inputs.top(), 0, x, y);
+        add(py);
+        state = PANEL_REGLUAR_POLYGON_START;
+    }
+    else if(state == PANEL_REGLUAR_POLYGON_START)
+    {
+        r = sqrt((mouseX-Ox)*(mouseX-Ox) + (mouseY-Oy)*(mouseY-Oy));
+        a = r/width*2;
+        b = r/height*2;
+        py->setR((a+b)/2);
+    }
 }
 void Panel::run(double mouseX, double mouseY)
 {
@@ -122,8 +170,13 @@ void Panel::run(double mouseX, double mouseY)
             drawLine();
             break;
         case PANEL_CIRCLE_START:
-            drawCircle();
+            drawOval();
             break;
+        case PANEL_OVAL_START:
+            drawOval();
+            break;
+        case PANEL_REGLUAR_POLYGON_START:
+            drawPoly();
     }
 }
 
@@ -147,10 +200,17 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 drawLine();
                 break;
             case PANEL_CIRCLE_WAIT:
-                drawCircle();
+                drawOval();
                 break;
             case PANEL_CIRCLE_START:
-                drawCircle();
+                drawOval();
+                break;
+            case PANEL_OVAL_WAIT:
+                // drawOval();
+                break;
+            case PANEL_REGLUAR_POLYGON_WAIT:
+                drawPoly();
+                break;
             case PANEL_NORMAL:
                 // drawPoint();
                 break;
@@ -167,18 +227,16 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
             case PANEL_CIRCLE_START:
                 state = PANEL_CIRCLE_WAIT;
                 break;
+            case PANEL_OVAL_WAIT:
+                // state = PANEL_OVAL_WAIT;
+                break;
+            case PANEL_REGLUAR_POLYGON_START:
+                state = PANEL_REGLUAR_POLYGON_WAIT;
         }
         
     }
 }
 
-void Panel::transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y)
-{
-    static int halfWidth = width/2;
-    static int halfHeight = height/2;
-    x = (GLfloat(mouseX)-halfWidth)/halfWidth;
-    y = (halfHeight-GLfloat(mouseY))/halfHeight;
-}
 
 void Panel::keyPressed(int key, int action)
 {
@@ -202,6 +260,21 @@ void Panel::keyPressed(int key, int action)
             state = PANEL_CIRCLE_WAIT;
             cout<<"切换到画圆模式"<<endl;
         }
+        else if(key == GLFW_KEY_4)
+        {
+            state = PANEL_OVAL_WAIT;
+            cout<<"切换到画椭圆模式"<<endl;
+        }
+        else if(key == GLFW_KEY_5)
+        {
+            state = PANEL_REGLUAR_POLYGON_WAIT;
+            cout<<"切换到画多边形模式，请在控制台输入边数"<<endl;
+            int temp;
+            cin>>temp;
+            inputs.push(temp);
+            // cin>>temp;
+            // inputs.push_back(temp);
+        }
         else if(key == GLFW_KEY_0)
         {
             state = PANEL_NORMAL;
@@ -214,4 +287,12 @@ void Panel::keyPressed(int key, int action)
                 state = PANEL_LINE_WAIT;
         }
     }
+}
+
+void Panel::transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y)
+{
+    static int halfWidth = width/2;
+    static int halfHeight = height/2;
+    x = (GLfloat(mouseX)-halfWidth)/halfWidth;
+    y = (halfHeight-GLfloat(mouseY))/halfHeight;
 }
