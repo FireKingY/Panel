@@ -5,6 +5,7 @@
 #include "Curve.h"
 #include <iostream>
 #include <cmath>
+#include <fstream>
 using namespace std;
 
 Panel::Panel(int width, int height):width(width),height(height),cnt(0){}
@@ -24,7 +25,7 @@ void Panel::add(Object* object)
 
 void Panel::drawCurve()
 {
-    std::cout<<"ttt"<<std::endl;
+    // std::cout<<"ttt"<<std::endl;
 
     static Curve* c;
     static GLfloat x,y;
@@ -331,6 +332,22 @@ void Panel::keyPressed(int key, int action)
             state = PANEL_NORMAL;
             cout<<"切换到普通模模式"<<endl;
         }
+        else if(key == GLFW_KEY_8)
+        {
+            string temp;
+            cout<<"请输入文件名"<<endl;
+            cin>>temp;
+            save(temp + ".panel");
+            cout<<"成功保存数据"<<endl;
+        }
+        else if(key == GLFW_KEY_9)
+        {
+            string temp;
+            cout<<"请输入文件名"<<endl;
+            cin>>temp;
+            read(temp + ".panel");
+            cout<<"成功读入数据"<<endl;
+        }
         else if(key == GLFW_KEY_C)
         {
             objects.clear();
@@ -366,4 +383,44 @@ void Panel::moveObj()
     ly = y;
 
     
+}
+
+void Panel::save(const string& fileName)
+{
+    ofstream out;
+    out.open(fileName, ios::out);
+    for(auto obj: objects)
+        obj->saveInfo(out);
+}
+
+void Panel::read(const string& fileName)
+{
+    objects.clear();
+
+    ifstream in;
+    int type;
+    Object* obj;
+
+    in.open(fileName, ios::in);
+    while(in>>type)
+    {
+        switch(type)
+        {
+            case Object::OVAL:
+                cout<<"read a oval"<<endl;
+                obj = new Oval;
+                break;
+            case Object::LINE:
+                cout<<"read a line"<<endl;
+                obj = new Line;
+                break;
+            case Object::CURVE:
+                cout<<"read a curve"<<endl;
+                obj = new Curve;
+                break;
+        }
+        obj->readInfo(in);
+        add(obj);       
+    }
+    save("log");
 }

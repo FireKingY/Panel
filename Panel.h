@@ -15,6 +15,8 @@ class Panel
         void drawPoly(bool newVertex);
         void drawCurve();
         void moveObj();
+        void save(const string& fileName);
+        void read(const string& fileName);
         void run(double mouseX, double mouseY);
         void mouseClick(double mouseX, double mouseY, int button, int action);
         void transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y);

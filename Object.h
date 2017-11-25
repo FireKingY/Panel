@@ -1,10 +1,11 @@
-
 #pragma once
 #include <iostream>
 #include <vector>
 #include <utility>
 #include <cmath>
 #include<GLFW/glfw3.h>
+#include <fstream>
+#include <string>
 using namespace std;
 
 class Object
@@ -12,6 +13,26 @@ class Object
     public:
         Object():needInitVers(false){};
         virtual void initVers() = 0;
+        
+        virtual void readInfo(ifstream& in)
+        {
+            int size;
+            in>>size;
+            GLfloat x,y;
+            for(int i=0;i<size;++i)
+            {
+                in>>x>>y;
+                vers.push_back(pff(x,y));
+            }
+
+        }
+        virtual void saveInfo(ofstream& out)
+        {
+            out<<type<<endl;
+            out<<vers.size()<<endl;
+            for(auto vertex:vers)
+                out<<vertex.first<<" "<<vertex.second<<endl;
+        }
 
         virtual void draw()
         {
@@ -80,7 +101,9 @@ class Object
             color[2] = blue;
             color[3] = aphla;
         }
-        int id;            
+        int id;
+        enum Type {CURVE, LINE, OVAL};       
+        Type type;         
 
     protected:
         typedef pair<GLfloat,GLfloat> pff;

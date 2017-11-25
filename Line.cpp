@@ -1,6 +1,11 @@
 #include "Line.h"
 #include <iostream>
 
+Line::Line()
+{
+    type = LINE;
+}
+
 void Line::setVertexs(GLfloat* vertexs)
 {
     vers[0].first = vertexs[0];
@@ -9,6 +14,7 @@ void Line::setVertexs(GLfloat* vertexs)
     vers[1].second = vertexs[3];
 
 }
+
 void Line::initVers()
 {
 
