@@ -7,6 +7,8 @@ class RegluarPolygon:public Object
         RegluarPolygon(int num, GLfloat r, GLfloat x, GLfloat y);
         void draw();
         void setR(GLfloat len);
+        void move(GLfloat x, GLfloat y);
+        void initVers();
     private:
         GLfloat r;
         GLfloat x;

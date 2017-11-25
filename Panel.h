@@ -1,5 +1,5 @@
 #pragma once
-#include<list>
+#include<vector>
 #include<stack>
 #include "Object.h"
 
@@ -13,22 +13,27 @@ class Panel
         void drawPoint();
         void drawOval();
         void drawPoly();
+        void drawCurve();
+        void moveObj();
         void run(double mouseX, double mouseY);
         void mouseClick(double mouseX, double mouseY, int button, int action);
         void transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y);
         void keyPressed(int key, int action);
-        enum State {PANEL_NORMAL,
+        enum State {PANEL_NORMAL, PANEL_MOVE_WAIT, PANEL_MOVE_START,
                     PANEL_LINE_WAIT, PANEL_LINE_START,
-                    PANEL_POINT_START, PANEL_POINT_WAIT,
+                    PANEL_CURVE_START, PANEL_CURVE_WAIT,
                     PANEL_CIRCLE_WAIT, PANEL_CIRCLE_START,
                     PANEL_OVAL_WAIT, PANEL_OVAL_START,
                     PANEL_REGLUAR_POLYGON_WAIT, PANEL_REGLUAR_POLYGON_START};
-        State state = PANEL_POINT_WAIT;
+        State state = PANEL_NORMAL;
     private:
-        std::list<Object*> objects;
+        std::vector<Object*> objects;
+        Object* cur;
         std::stack<int> inputs;
         double mouseX,mouseY;
         int width;
         int height;
-        GLfloat vertex1[2] = {0.0f, 0.0f};
+        int cnt;
+        // GLfloat vertex1[2] = {0.0f, 0.0f};
+        
 };

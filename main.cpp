@@ -1,11 +1,9 @@
 #include<GLFW/glfw3.h>
-#include "Point.h"
 #include<iostream>
 #include<list>
 #include "Line.h"
 #include "Panel.h"
 #include "Oval.h"
-#include "RegluarPolygon.h"
 using namespace std;
 
 int width = 800; 

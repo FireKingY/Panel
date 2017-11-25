@@ -7,8 +7,10 @@ class Line: public Object
         // Line();
         void draw();
         void setVertexs(GLfloat* vertexs);
+        void initVers();
+        // void move(GLfloat x, GLfloat y);
         // void setColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat aphla);
 
     private:
-        GLfloat vertexs[4] = {-1.0f,-1.0f,1.0f,1.0f};
+        GLfloat vertexs[4];
 };

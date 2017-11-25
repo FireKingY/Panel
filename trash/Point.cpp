@@ -28,3 +28,8 @@ void Point::draw()
 //     color[2] = blue;
 //     color[3] = aphla;
 // }
+
+void Point::move(GLfloat x, GLfloat y)
+{
+    
+}

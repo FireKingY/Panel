@@ -1,13 +1,13 @@
 #include "Panel.h"
 #include "Line.h"
-#include "Point.h"
-#include "RegluarPolygon.h"
+// #include "RegluarPolygon.h"
 #include "Oval.h"
+#include "Curve.h"
 #include <iostream>
 #include <cmath>
 using namespace std;
 
-Panel::Panel(int width, int height):width(width),height(height){}
+Panel::Panel(int width, int height):width(width),height(height),cnt(0){}
 
 void Panel::drawObjs()
 {
@@ -18,6 +18,29 @@ void Panel::drawObjs()
 void Panel::add(Object* object)
 {
     objects.push_back(object);
+    object->id = ++cnt;
+    cout<<"图形id"<<cnt<<endl;
+}
+
+void Panel::drawCurve()
+{
+    std::cout<<"ttt"<<std::endl;
+
+    static Curve* c;
+    static GLfloat x,y;
+    if(state == PANEL_CURVE_WAIT)
+    {
+        transfer(mouseX, mouseY, x, y);
+        c = new Curve;
+        c->pushVertex(x,y);
+        add(c);
+        state = PANEL_CURVE_START;
+    }
+    if(state == PANEL_CURVE_START)
+    {
+        transfer(mouseX, mouseY, x, y);
+        c->pushVertex(x,y);
+    }
 }
 
 void Panel::drawLine()
@@ -32,26 +55,31 @@ void Panel::drawLine()
         add(l);
         transfer(mouseX, mouseY, vertexs[0], vertexs[1]);
         state = PANEL_LINE_START;
+        l->pushVertex(vertexs[0], vertexs[1]);
+        l->pushVertex(vertexs[0], vertexs[1]);        
     }
     if(state == PANEL_LINE_START)
     {
         transfer(mouseX, mouseY, vertexs[2], vertexs[3]);    
-        l->setVertexs(vertexs);
+        // l->setVertexs(vertexs);
+        l->popVertex();
+        l->pushVertex(vertexs[2], vertexs[3]);
+        // cout<<vertex1;
     }
-    else if(state == PANEL_POINT_WAIT)
-    {
-        transfer(mouseX, mouseY, vertexs[2], vertexs[3]);
-        state =PANEL_POINT_START;
-    }
-    else if(state == PANEL_POINT_START)
-    {
-        l = new Line;
-        add(l);
-        vertexs[0] = vertexs[2];
-        vertexs[1] = vertexs[3];
-        transfer(mouseX, mouseY, vertexs[2], vertexs[3]);
-        l->setVertexs(vertexs);
-    }
+    // else if(state == PANEL_CURVE_WAIT)
+    // {
+    //     transfer(mouseX, mouseY, vertexs[2], vertexs[3]);
+    //     state =PANEL_CURVE_START;
+    // }
+    // else if(state == PANEL_CURVE_START)
+    // {
+    //     l = new Line;
+    //     add(l);
+    //     vertexs[0] = vertexs[2];
+    //     vertexs[1] = vertexs[3];
+    //     transfer(mouseX, mouseY, vertexs[2], vertexs[3]);
+    //     l->setVertexs(vertexs);
+    // }
     // else if( )
     // vertexs[0]=vertexs[1]=0.0f;
     // glfwGetCursorPos(window, &x, &y);
@@ -66,14 +94,17 @@ void Panel::drawLine()
 
 void Panel::drawPoint()
 {
-    static Point* p;
-    static GLfloat x,y;
-    if(state == PANEL_POINT_START)
-    {
-        transfer(mouseX, mouseY, x, y);
-        p = new Point(x,y);
-        add(p);
-    }
+    // static Point* p;
+    // static GLfloat x,y,lx,ly;
+    // static GLfloat vertexs;
+    // if(state == PANEL_CURVE_START)
+    // {
+    //     transfer(mouseX, mouseY, x, y);
+    //     p = new Point(x,y);
+    //     add(p);
+    //     lx = mouseX;
+    //     ly = mouseY;
+    // }
 }
 
 void Panel::drawOval()
@@ -92,7 +123,7 @@ void Panel::drawOval()
         Ox = mouseX;
         Oy = mouseY;
         transfer(Ox, Oy, x, y);
-        o = new Oval(x, y, 0, 0);
+        o = new Oval(x, y, 0, 0, 1000);
         // std::cout<<x<<" "<<y<<std::endl;
 
         add(o);
@@ -132,31 +163,85 @@ void Panel::drawOval()
 
 void Panel::drawPoly()
 {
-    static RegluarPolygon* py;
+    static Oval* o;
     static GLfloat x;
     static GLfloat y;
     static GLfloat r;
     static GLfloat a;
     static GLfloat b;
+    
     static double Ox;
     static double Oy;
     if(state == PANEL_REGLUAR_POLYGON_WAIT)
     {
         Ox = mouseX;
         Oy = mouseY;
-        transfer(mouseX, mouseY, x, y);
-        py = new RegluarPolygon(inputs.top(), 0, x, y);
-        add(py);
+        transfer(Ox, Oy, x, y);
+        o = new Oval(x, y, 0, 0, inputs.top());
+        // std::cout<<x<<" "<<y<<std::endl;
+
+        add(o);
         state = PANEL_REGLUAR_POLYGON_START;
+        // std::cout<<x<<" "<<y<<std::endl;
+
     }
     else if(state == PANEL_REGLUAR_POLYGON_START)
     {
         r = sqrt((mouseX-Ox)*(mouseX-Ox) + (mouseY-Oy)*(mouseY-Oy));
         a = r/width*2;
         b = r/height*2;
-        py->setR((a+b)/2);
+        o->setAB(a, b);
+        
     }
+
+     else if(state == PANEL_OVAL_WAIT)
+     {
+        // cout<<"";
+
+        // Ox = mouseX;
+        // Oy = mouseY;
+        // transfer(Ox, Oy, x, y);
+        // o = new Oval(x, y, 0, 0);
+        // // std::cout<<x<<" "<<y<<std::endl;
+
+        // add(o);
+        // state = PANEL_OVAL_START;
+        // // std::cout<<x<<" "<<y<<std::endl;
+     }
+     else if(state == PANEL_OVAL_START)
+     {
+        
+     }
+    
 }
+
+// void Panel::drawPoly()
+// {
+//     static Oval* o;
+//     static GLfloat x;
+//     static GLfloat y;
+//     static GLfloat r;
+//     static GLfloat a;
+//     static GLfloat b;
+//     static double Ox;
+//     static double Oy;
+//     if(state == PANEL_REGLUAR_POLYGON_WAIT)
+//     {
+//         Ox = mouseX;
+//         Oy = mouseY;
+//         transfer(mouseX, mouseY, x, y);
+//         py = new RegluarPolygon(inputs.top(), 0, x, y);
+//         add(py);
+//         state = PANEL_REGLUAR_POLYGON_START;
+//     }
+//     else if(state == PANEL_REGLUAR_POLYGON_START)
+//     {
+//         r = sqrt((mouseX-Ox)*(mouseX-Ox) + (mouseY-Oy)*(mouseY-Oy));
+//         a = r/width*2;
+//         b = r/height*2;
+//         py->setR((a+b)/2);
+//     }
+// }
 void Panel::run(double mouseX, double mouseY)
 {
     this->mouseX = mouseX;
@@ -166,8 +251,8 @@ void Panel::run(double mouseX, double mouseY)
         case PANEL_LINE_START:
             drawLine();
             break;
-        case PANEL_POINT_START:
-            drawLine();
+        case PANEL_CURVE_START:
+            drawCurve();
             break;
         case PANEL_CIRCLE_START:
             drawOval();
@@ -177,6 +262,11 @@ void Panel::run(double mouseX, double mouseY)
             break;
         case PANEL_REGLUAR_POLYGON_START:
             drawPoly();
+            // cout<<"flag1"<<endl;
+            break;
+        case PANEL_MOVE_START:
+            moveObj();
+            break;
     }
 }
 
@@ -194,10 +284,11 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 drawLine();
                 break;
             case PANEL_LINE_START:
+                
                 state = PANEL_LINE_WAIT;
                 break;
-            case PANEL_POINT_WAIT:
-                drawLine();
+            case PANEL_CURVE_WAIT:
+                drawCurve();
                 break;
             case PANEL_CIRCLE_WAIT:
                 drawOval();
@@ -209,7 +300,23 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 // drawOval();
                 break;
             case PANEL_REGLUAR_POLYGON_WAIT:
+                // cout<<"111"<<endl;
                 drawPoly();
+                break;
+            case PANEL_MOVE_WAIT:
+                GLfloat x,y;
+                transfer(mouseX, mouseY, x, y);
+                cur = nullptr;
+                for(auto obj:objects)
+                {
+                    cout<<"testing"<<endl;
+                    if(obj->selected(x,y))
+                    {
+                        cur = obj;
+                        break;
+                    }
+                }
+                moveObj();
                 break;
             case PANEL_NORMAL:
                 // drawPoint();
@@ -221,8 +328,8 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
     {
         switch(state)
         {
-            case PANEL_POINT_START:
-                state = PANEL_POINT_WAIT;
+            case PANEL_CURVE_START:
+                state = PANEL_CURVE_WAIT;
                 break;
             case PANEL_CIRCLE_START:
                 state = PANEL_CIRCLE_WAIT;
@@ -232,6 +339,10 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 break;
             case PANEL_REGLUAR_POLYGON_START:
                 state = PANEL_REGLUAR_POLYGON_WAIT;
+                break;
+            case PANEL_MOVE_START:
+                state = PANEL_MOVE_WAIT;
+                break;
         }
         
     }
@@ -252,7 +363,7 @@ void Panel::keyPressed(int key, int action)
         }
         else if(key == GLFW_KEY_2)
         {
-            state = PANEL_POINT_WAIT;
+            state = PANEL_CURVE_WAIT;
             cout<<"切换到曲线模模式"<<endl;
         }
         else if(key == GLFW_KEY_3)
@@ -260,20 +371,26 @@ void Panel::keyPressed(int key, int action)
             state = PANEL_CIRCLE_WAIT;
             cout<<"切换到画圆模式"<<endl;
         }
+        // else if(key == GLFW_KEY_4)
+        // {
+        //     state = PANEL_OVAL_WAIT;
+        //     cout<<"切换到画椭圆模式"<<endl;
+        // }
         else if(key == GLFW_KEY_4)
-        {
-            state = PANEL_OVAL_WAIT;
-            cout<<"切换到画椭圆模式"<<endl;
-        }
-        else if(key == GLFW_KEY_5)
         {
             state = PANEL_REGLUAR_POLYGON_WAIT;
             cout<<"切换到画多边形模式，请在控制台输入边数"<<endl;
             int temp;
             cin>>temp;
             inputs.push(temp);
+            // break;
             // cin>>temp;
             // inputs.push_back(temp);
+        }
+        else if(key == GLFW_KEY_5)
+        {
+            state = PANEL_MOVE_WAIT;
+            cout<<"切换到拖拽模式"<<endl;
         }
         else if(key == GLFW_KEY_0)
         {
@@ -295,4 +412,24 @@ void Panel::transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y)
     static int halfHeight = height/2;
     x = (GLfloat(mouseX)-halfWidth)/halfWidth;
     y = (halfHeight-GLfloat(mouseY))/halfHeight;
+}
+
+void Panel::moveObj()
+{
+    static GLfloat lx,ly,x,y;
+    if(cur == nullptr)
+        return;
+    if(state == PANEL_MOVE_WAIT)
+    {
+        transfer(mouseX, mouseY, lx ,ly);
+        state = PANEL_MOVE_START;
+        return;
+    }
+    transfer(mouseX, mouseY, x, y);
+    cout<<cur->id<<" is moving"<<endl;
+    cur->move(x-lx, y-ly);
+    lx = x;
+    ly = y;
+
+    
 }

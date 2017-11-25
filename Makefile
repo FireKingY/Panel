@@ -1,5 +1,5 @@
 CC = g++
-OBJS = main.o Point.o Line.o Panel.o Oval.o RegluarPolygon.o
+OBJS = main.o Line.o Panel.o Oval.o Curve.o
 TARGET = main.out
 CFLAGS = -std=c++11 -Wall
 LINKS = -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor

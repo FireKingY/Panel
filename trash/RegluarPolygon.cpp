@@ -3,7 +3,10 @@
 #include <iostream>
 #define PI 3.1415926
 
-RegluarPolygon::RegluarPolygon(int num, GLfloat r, GLfloat x, GLfloat y):num(num),r(r),x(x),y(y){}
+RegluarPolygon::RegluarPolygon(int num, GLfloat r, GLfloat x, GLfloat y):num(num),r(r),x(x),y(y)
+{
+    needInitVers = true;
+}
 
 void RegluarPolygon::draw()
 {
@@ -24,4 +27,14 @@ void RegluarPolygon::draw()
 void RegluarPolygon::setR(GLfloat r)
 {
     this->r = r;
+}
+
+void RegluarPolygon::move(GLfloat x, GLfloat y)
+{
+
+}
+
+void RegluarPolygon::initVers()
+{
+
 }
