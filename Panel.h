@@ -11,7 +11,8 @@ class Panel
         void add(Object* object);
         void drawLine();
         void drawOval();
-        void drawPoly();
+        void drawRegPoly();
+        void drawPoly(bool newVertex);
         void drawCurve();
         void moveObj();
         void run(double mouseX, double mouseY);
@@ -19,6 +20,7 @@ class Panel
         void transfer(double mouseX, double mouseY, GLfloat& x, GLfloat& y);
         void keyPressed(int key, int action);
         enum State {PANEL_NORMAL, PANEL_MOVE_WAIT, PANEL_MOVE_START,
+                    PANEL_POLYGON_WAIT, PANEL_POLYGON_START,
                     PANEL_LINE_WAIT, PANEL_LINE_START,
                     PANEL_CURVE_START, PANEL_CURVE_WAIT,
                     PANEL_CIRCLE_WAIT, PANEL_CIRCLE_START,

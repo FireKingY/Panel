@@ -100,7 +100,41 @@ void Panel::drawOval()
     }
 }
 
-void Panel::drawPoly()
+
+void Panel::drawPoly(bool newVertex = false)
+{
+    static Curve* c;
+    static GLfloat ox, oy, x , y;
+    if(state == PANEL_POLYGON_WAIT)
+    {
+        transfer(mouseX, mouseY, x ,y);
+        c = new Curve;
+        c->pushVertex(x,y);
+        c->pushVertex(x,y);        
+        add(c);
+        state = PANEL_POLYGON_START;
+
+        ox = x;
+        oy = y;
+    }
+    else if (state == PANEL_POLYGON_START)
+    {
+        transfer(mouseX, mouseY ,x ,y);
+        if(!newVertex)
+            c->popVertex();
+        else if( (x-ox)*(x-ox)+(y-oy)*(y-oy)<=0.0003 )
+        {
+            state = PANEL_POLYGON_WAIT;            
+            // c->pushVertex(ox, oy); 
+            x = ox;
+            y = oy; 
+            c->popVertex();          
+        }
+        // else
+        c->pushVertex(x, y);            
+    }
+}
+void Panel::drawRegPoly()
 {
     static Oval* o;
     static GLfloat x;
@@ -152,8 +186,11 @@ void Panel::run(double mouseX, double mouseY)
             drawOval();
             break;
         case PANEL_REGLUAR_POLYGON_START:
-            drawPoly();
+            drawRegPoly();
             // cout<<"flag1"<<endl;
+            break;
+        case PANEL_POLYGON_START:
+            drawPoly();
             break;
         case PANEL_MOVE_START:
             moveObj();
@@ -175,7 +212,6 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 drawLine();
                 break;
             case PANEL_LINE_START:
-                
                 state = PANEL_LINE_WAIT;
                 break;
             case PANEL_CURVE_WAIT:
@@ -192,7 +228,13 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 break;
             case PANEL_REGLUAR_POLYGON_WAIT:
                 // cout<<"111"<<endl;
+                drawRegPoly();
+                break;
+            case PANEL_POLYGON_WAIT:
                 drawPoly();
+                break;
+            case PANEL_POLYGON_START:
+                drawPoly(true);
                 break;
             case PANEL_MOVE_WAIT:
                 GLfloat x,y;
@@ -215,7 +257,7 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
         }
     }
     //左键松开
-    if(button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
+    else if(button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE)
     {
         switch(state)
         {
@@ -237,6 +279,9 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
         }
         
     }
+    // else if(button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS)
+    
+    
 }
 
 
@@ -246,17 +291,18 @@ void Panel::keyPressed(int key, int action)
     {
         if(key == GLFW_KEY_1)
         {
+            state = PANEL_CURVE_WAIT;
+            cout<<"切换到曲线模模式"<<endl;
+        }
+        else if(key == GLFW_KEY_2)
+        {
             if(state != PANEL_LINE_START && state != PANEL_LINE_WAIT)
             {
                 state = PANEL_LINE_WAIT;
             cout<<"切换到画线模模式"<<endl;            
             }
         }
-        else if(key == GLFW_KEY_2)
-        {
-            state = PANEL_CURVE_WAIT;
-            cout<<"切换到曲线模模式"<<endl;
-        }
+        
         else if(key == GLFW_KEY_3)
         {
             state = PANEL_CIRCLE_WAIT;
@@ -269,11 +315,13 @@ void Panel::keyPressed(int key, int action)
             int temp;
             cin>>temp;
             inputs.push(temp);
-            // break;
-            // cin>>temp;
-            // inputs.push_back(temp);
         }
         else if(key == GLFW_KEY_5)
+        {
+            state = PANEL_POLYGON_WAIT;
+            cout<<"切换至画任意多边形模式"<<endl;
+        }
+        else if(key == GLFW_KEY_6)
         {
             state = PANEL_MOVE_WAIT;
             cout<<"切换到拖拽模式"<<endl;
