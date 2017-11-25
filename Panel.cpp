@@ -20,7 +20,7 @@ void Panel::add(Object* object)
 {
     objects.push_back(object);
     object->id = ++cnt;
-    cout<<"图形id"<<cnt<<endl;
+    // cout<<"图形id"<<cnt<<endl;
 }
 
 void Panel::drawCurve()
@@ -243,7 +243,7 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
                 cur = nullptr;
                 for(auto obj:objects)
                 {
-                    cout<<"testing"<<endl;
+                    // cout<<"testing"<<endl;
                     if(obj->selected(x,y))
                     {
                         cur = obj;
@@ -377,7 +377,7 @@ void Panel::moveObj()
         return;
     }
     transfer(mouseX, mouseY, x, y);
-    cout<<cur->id<<" is moving"<<endl;
+    // cout<<cur->id<<" is moving"<<endl;
     cur->move(x-lx, y-ly);
     lx = x;
     ly = y;
@@ -422,5 +422,5 @@ void Panel::read(const string& fileName)
         obj->readInfo(in);
         add(obj);       
     }
-    save("log");
+    // save("log");
 }

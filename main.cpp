@@ -8,11 +8,6 @@ using namespace std;
 
 int width = 800; 
 int height = 800;
-float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
-};
 Panel* curPanel;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -24,6 +19,15 @@ void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY);
 
 int main()
 {
+
+    cout<<"1.曲线"<<endl;
+    cout<<"2.直线"<<endl;
+    cout<<"3.圆"<<endl;
+    cout<<"4.正多边形"<<endl;
+    cout<<"5.任意多边形"<<endl;
+    cout<<"8.保存数据"<<endl;
+    cout<<"9.读取数据"<<endl;
+    cout<<"c.重置画板"<<endl;
     // Oval c = Oval(0.0f,0.0f,0.3f,0.4f);
     // RegluarPolygon py(4,0.3f);
     Panel panel(width, height);
@@ -103,10 +107,10 @@ void mouse_press_event(GLFWwindow* window, int button, int action, int mods)
     curPanel->mouseClick(mouseX, mouseY, button, action);
     
     //鼠标左键按下状态检测
-    if(button==0 && action==1)
-    {
-        cout<<mouseX<<" "<<mouseY<<endl;
-    }
+    // if(button==0 && action==1)
+    // {
+    //     cout<<mouseX<<" "<<mouseY<<endl;
+    // }
 }
 
 void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY)
