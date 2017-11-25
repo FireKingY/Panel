@@ -47,7 +47,6 @@ void Panel::drawLine()
 {
     static GLfloat vertexs[4];
     static Line* l = NULL;
-    // double x,y;
     
     if(state == PANEL_LINE_WAIT)
     {
@@ -61,50 +60,10 @@ void Panel::drawLine()
     if(state == PANEL_LINE_START)
     {
         transfer(mouseX, mouseY, vertexs[2], vertexs[3]);    
-        // l->setVertexs(vertexs);
         l->popVertex();
         l->pushVertex(vertexs[2], vertexs[3]);
-        // cout<<vertex1;
     }
-    // else if(state == PANEL_CURVE_WAIT)
-    // {
-    //     transfer(mouseX, mouseY, vertexs[2], vertexs[3]);
-    //     state =PANEL_CURVE_START;
-    // }
-    // else if(state == PANEL_CURVE_START)
-    // {
-    //     l = new Line;
-    //     add(l);
-    //     vertexs[0] = vertexs[2];
-    //     vertexs[1] = vertexs[3];
-    //     transfer(mouseX, mouseY, vertexs[2], vertexs[3]);
-    //     l->setVertexs(vertexs);
-    // }
-    // else if( )
-    // vertexs[0]=vertexs[1]=0.0f;
-    // glfwGetCursorPos(window, &x, &y);
 
-    // std::cout<<vertexs[2]<<" "<<vertexs[3]<<std::endl;
-
-    
-    
-    
-
-}
-
-void Panel::drawPoint()
-{
-    // static Point* p;
-    // static GLfloat x,y,lx,ly;
-    // static GLfloat vertexs;
-    // if(state == PANEL_CURVE_START)
-    // {
-    //     transfer(mouseX, mouseY, x, y);
-    //     p = new Point(x,y);
-    //     add(p);
-    //     lx = mouseX;
-    //     ly = mouseY;
-    // }
 }
 
 void Panel::drawOval()
@@ -139,26 +98,6 @@ void Panel::drawOval()
         o->setAB(a, b);
         
     }
-
-     else if(state == PANEL_OVAL_WAIT)
-     {
-        // cout<<"";
-
-        // Ox = mouseX;
-        // Oy = mouseY;
-        // transfer(Ox, Oy, x, y);
-        // o = new Oval(x, y, 0, 0);
-        // // std::cout<<x<<" "<<y<<std::endl;
-
-        // add(o);
-        // state = PANEL_OVAL_START;
-        // // std::cout<<x<<" "<<y<<std::endl;
-     }
-     else if(state == PANEL_OVAL_START)
-     {
-        
-     }
-    
 }
 
 void Panel::drawPoly()
@@ -178,11 +117,9 @@ void Panel::drawPoly()
         Oy = mouseY;
         transfer(Ox, Oy, x, y);
         o = new Oval(x, y, 0, 0, inputs.top());
-        // std::cout<<x<<" "<<y<<std::endl;
 
         add(o);
         state = PANEL_REGLUAR_POLYGON_START;
-        // std::cout<<x<<" "<<y<<std::endl;
 
     }
     else if(state == PANEL_REGLUAR_POLYGON_START)
@@ -194,54 +131,8 @@ void Panel::drawPoly()
         
     }
 
-     else if(state == PANEL_OVAL_WAIT)
-     {
-        // cout<<"";
-
-        // Ox = mouseX;
-        // Oy = mouseY;
-        // transfer(Ox, Oy, x, y);
-        // o = new Oval(x, y, 0, 0);
-        // // std::cout<<x<<" "<<y<<std::endl;
-
-        // add(o);
-        // state = PANEL_OVAL_START;
-        // // std::cout<<x<<" "<<y<<std::endl;
-     }
-     else if(state == PANEL_OVAL_START)
-     {
-        
-     }
-    
 }
 
-// void Panel::drawPoly()
-// {
-//     static Oval* o;
-//     static GLfloat x;
-//     static GLfloat y;
-//     static GLfloat r;
-//     static GLfloat a;
-//     static GLfloat b;
-//     static double Ox;
-//     static double Oy;
-//     if(state == PANEL_REGLUAR_POLYGON_WAIT)
-//     {
-//         Ox = mouseX;
-//         Oy = mouseY;
-//         transfer(mouseX, mouseY, x, y);
-//         py = new RegluarPolygon(inputs.top(), 0, x, y);
-//         add(py);
-//         state = PANEL_REGLUAR_POLYGON_START;
-//     }
-//     else if(state == PANEL_REGLUAR_POLYGON_START)
-//     {
-//         r = sqrt((mouseX-Ox)*(mouseX-Ox) + (mouseY-Oy)*(mouseY-Oy));
-//         a = r/width*2;
-//         b = r/height*2;
-//         py->setR((a+b)/2);
-//     }
-// }
 void Panel::run(double mouseX, double mouseY)
 {
     this->mouseX = mouseX;
@@ -371,11 +262,6 @@ void Panel::keyPressed(int key, int action)
             state = PANEL_CIRCLE_WAIT;
             cout<<"切换到画圆模式"<<endl;
         }
-        // else if(key == GLFW_KEY_4)
-        // {
-        //     state = PANEL_OVAL_WAIT;
-        //     cout<<"切换到画椭圆模式"<<endl;
-        // }
         else if(key == GLFW_KEY_4)
         {
             state = PANEL_REGLUAR_POLYGON_WAIT;

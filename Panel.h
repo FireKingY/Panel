@@ -10,7 +10,6 @@ class Panel
         void drawObjs();
         void add(Object* object);
         void drawLine();
-        void drawPoint();
         void drawOval();
         void drawPoly();
         void drawCurve();

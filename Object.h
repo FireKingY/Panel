@@ -11,8 +11,29 @@ class Object
 {
     public:
         Object():needInitVers(false){};
-        virtual void draw() = 0;
         virtual void initVers() = 0;
+
+        virtual void draw()
+        {
+            glColor4fv(color);
+
+            int vertexNum = vers.size();
+            if(vertexNum == 1)
+            {
+                glBegin(GL_POINTS);
+                    glVertex2f(vers[0].first, vers[0].second);
+                glEnd();
+            }
+            else
+            {
+                // std::cout<<"ttt"<<std::endl;
+                glBegin(GL_LINE_STRIP);
+                    for(auto vertex: vers)
+                        glVertex2f(vertex.first, vertex.second);
+                glEnd();
+            }
+        }
+
         virtual void move(GLfloat x, GLfloat y)
         {
             cout<<x <<" "<<y<<endl;

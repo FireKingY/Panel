@@ -5,7 +5,7 @@ class Line: public Object
 {
     public:
         // Line();
-        void draw();
+        // void draw();
         void setVertexs(GLfloat* vertexs);
         void initVers();
         // void move(GLfloat x, GLfloat y);
