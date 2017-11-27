@@ -54,7 +54,6 @@ extern "C"
 {
     void* create()
     {
-        cout<<"created a Line"<<endl;
         return new Line;
     }
 

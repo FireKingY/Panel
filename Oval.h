@@ -14,6 +14,9 @@ class Oval:public Object
         // void draw();
         void setAB(GLfloat a, GLfloat b);
         void move(GLfloat x, GLfloat y);
+        void update(GLfloat x, GLfloat y);
+        void mouseClick(int button, int action);
+        void setVertexNum(int VertexNum);
     protected:
         GLfloat x;
         GLfloat y;

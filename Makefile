@@ -1,7 +1,7 @@
 CC = g++
 OBJS = main.o Panel.o Object.o
 BASE = Object.cpp
-SOS = libLine.so
+SOS = libLine.so libCurve.so libOval.so libPolygon.so libRegularPolygon.so
 TARGET = main.out
 CFLAGS = -std=c++11 -Wall
 SOSFLAGS = -fpic -shared

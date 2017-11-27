@@ -4,7 +4,7 @@ using namespace std;
 
 Curve::Curve()
 {
-    type = CURVE;
+    type = "Curve";
 }
 Curve::~Curve()
 {
@@ -15,25 +15,29 @@ void Curve::initVers()
 
 }
 
-void Curve::drawCurve(Panel::State& state, Panel* panel, double& mouseX, double& mouseY)
+void Curve::update(GLfloat x, GLfloat y)
 {
-    // std::cout<<"ttt"<<std::endl;
+    if(state == START)
+        pushVertex(x,y);
+}
 
-    static Curve *c;
-    static GLfloat x, y;
-    if (state == Panel::PANEL_CURVE_WAIT)
+void Curve::mouseClick(int button, int action)
+{
+    if(state == CREATED)
+        state = START;
+    else if(state == START)
+        state = DONE;
+}
+
+extern "C"
+{
+    void* create()
     {
-        panel->transfer(mouseX, mouseY, x, y);
-        c = new Curve;
-        c->pushVertex(x, y);
-        cout<<x<<" "<<y<<endl;
-        panel->addObj(c);
-        state = Panel::PANEL_CURVE_START;
+        return new Curve;
     }
-    if (state == Panel::PANEL_CURVE_START)
+
+    string type()
     {
-        panel->transfer(mouseX, mouseY, x, y);
-        c->pushVertex(x, y);
-        cout<<x<<" "<<y<<endl;        
+        return "Curve";
     }
 }

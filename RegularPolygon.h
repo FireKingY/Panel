@@ -1,12 +1,14 @@
 #pragma once
 #include "Object.h"
 #include "Panel.h"
-class Curve:public Object
+class RegularPolygon:public Object
 {
     public:
-        Curve();
-        virtual ~Curve();
+        RegularPolygon();
+        virtual ~RegularPolygon();
         virtual void update(GLfloat x, GLfloat y);
         virtual void mouseClick(int button, int action);
         virtual void initVers();
+    private:
+        GLfloat x1,x2,y1,y2;
 };

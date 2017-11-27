@@ -10,8 +10,6 @@ class Line: public Object
         void update(GLfloat x, GLfloat y);
         void mouseClick(int button, int action);
         ~Line();
-        // void move(GLfloat x, GLfloat y);
-        // void setColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat aphla);
 
     private:
         GLfloat vertexs[4];
