@@ -27,7 +27,7 @@ void Curve::drawCurve(Panel::State& state, Panel* panel, double& mouseX, double&
         c = new Curve;
         c->pushVertex(x, y);
         cout<<x<<" "<<y<<endl;
-        panel->add(c);
+        panel->addObj(c);
         state = Panel::PANEL_CURVE_START;
     }
     if (state == Panel::PANEL_CURVE_START)

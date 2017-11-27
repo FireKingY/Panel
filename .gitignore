@@ -6,3 +6,5 @@ ToDoList
 *.d
 *.panel
 savedFile/*.*
+plugins/*.*
+keng

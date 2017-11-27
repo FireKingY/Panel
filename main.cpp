@@ -1,9 +1,6 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
-#include<list>
-#include "Line.h"
 #include "Panel.h"
-#include "Oval.h"
 using namespace std;
 
 int width = 800; 
@@ -20,25 +17,11 @@ void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY);
 int main()
 {
 
-    cout<<"1.曲线"<<endl;
-    cout<<"2.直线"<<endl;
-    cout<<"3.圆"<<endl;
-    cout<<"4.正多边形"<<endl;
-    cout<<"5.任意多边形"<<endl;
-    cout<<"6.拖拽图形"<<endl;
-    cout<<"8.保存数据"<<endl;
-    cout<<"9.读取数据"<<endl;
-    cout<<"c.重置画板"<<endl;
-    // Oval c = Oval(0.0f,0.0f,0.3f,0.4f);
-    // RegluarPolygon py(4,0.3f);
     Panel panel(width, height);
     curPanel = &panel;
     
 
     glfwInit();
-    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(width, height, "FirePanel", NULL, NULL);
     if(window == NULL)
@@ -56,19 +39,10 @@ int main()
     
     while(!glfwWindowShouldClose(window))
     {
-        //event
-        // processInput(window);
-
-        //render
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        // glColor3f(1.0f, 0.0f, 0.0f);
         curPanel->drawObjs();
-        // c.draw();
-        // panel.run();
-    //    py.draw();
 
-        //swapBuffer
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -84,11 +58,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0,0,width,height);
 }
 
-// void processClick(GLFWwindow* window)
-// {
-//     if(glfwGetCursorPos)
-// }
 
+
+//键盘按键处理
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 //key:按键 scancode:扫描码  
@@ -107,16 +79,12 @@ void mouse_press_event(GLFWwindow* window, int button, int action, int mods)
 
     curPanel->mouseClick(mouseX, mouseY, button, action);
     
-    //鼠标左键按下状态检测
-    // if(button==0 && action==1)
-    // {
-    //     cout<<mouseX<<" "<<mouseY<<endl;
-    // }
 }
 
+//光标移动
 void cursor_position_callback(GLFWwindow* window, double mouseX, double mouseY)
 {
     // cout<<mouseX<<mouseY<<endl;
-    curPanel->run(mouseX, mouseY);
+    curPanel->mouseMoved(mouseX, mouseY);
 }
  

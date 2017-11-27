@@ -1,6 +1,6 @@
 #include "Object.h"
 #include <cmath>
-Object::Object():needInitVers(false){}
+Object::Object():state(CREATED),needInitVers(false){}
 Object::~Object()
 {
     vers.clear();
@@ -28,16 +28,19 @@ void Object::saveInfo(ofstream& out)
 
 void Object::draw()
 {
+    // cout<<"ing"<<endl;
     glColor4fv(color);
+    // glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 
     int vertexNum = vers.size();
+    // cout<<vertexNum<<endl;
     if(vertexNum == 1)
     {
         glBegin(GL_POINTS);
             glVertex2f(vers[0].first, vers[0].second);
         glEnd();
     }
-    else
+    else if(vertexNum > 1)
     {
         // std::cout<<"ttt"<<std::endl;
         glBegin(GL_LINE_STRIP);
@@ -49,7 +52,7 @@ void Object::draw()
 
 void Object::move(GLfloat x, GLfloat y)
 {
-    // cout<<x <<" "<<y<<endl;
+    cout<<x <<" "<<y<<endl;
     int len = vers.size();
     for(int i=0;i<len;++i)
     {
@@ -61,7 +64,7 @@ void Object::move(GLfloat x, GLfloat y)
 bool Object::selected(GLfloat x, GLfloat y, GLfloat r)
 {
         // cout<<id<<"-"<<x<<" "<<y<<" "<<r<<endl;;
-        static GLfloat a,b,c,x0;
+        static GLfloat a,b,c;
         if(needInitVers)
             initVers();
         int len = vers.size();
@@ -78,7 +81,7 @@ bool Object::selected(GLfloat x, GLfloat y, GLfloat r)
             c = -vers[i-1].first*vers[i].second+vers[i].first*vers[i-1].second;
 
             len2 = (a*x+b*y+c)*(a*x+b*y+c)/(a*a+b*b);
-            x0 = (b*b-a*b*y-a*c)/(a*a+b*b);
+            // x0 = (b*b-a*b*y-a*c)/(a*a+b*b);
             // cout<<len2<<endl;
             if(  len2 <=r2 && (x-vers[i].first)*(x-vers[i-1].first)<=0)
                 return true;
