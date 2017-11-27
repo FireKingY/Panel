@@ -175,7 +175,7 @@ void Panel::run(double mouseX, double mouseY)
         drawLine();
         break;
     case PANEL_CURVE_START:
-        drawCurve();
+        Curve::drawCurve(state, this,mouseX,mouseY);
         break;
     case PANEL_CIRCLE_START:
         drawOval();
@@ -213,7 +213,7 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
             state = PANEL_LINE_WAIT;
             break;
         case PANEL_CURVE_WAIT:
-            drawCurve();
+            Curve::drawCurve(state, this,mouseX,mouseY);
             break;
         case PANEL_CIRCLE_WAIT:
             drawOval();
@@ -379,7 +379,7 @@ void Panel::moveObj()
 void Panel::save(const string &fileName)
 {
     ofstream out;
-    out.open(fileName, ios::out);
+    out.open("savedFile/"+fileName, ios::out);
     for (auto obj : objects)
         obj->saveInfo(out);
 }
@@ -392,7 +392,7 @@ void Panel::read(const string &fileName)
     int type;
     Object *obj;
 
-    in.open(fileName, ios::in);
+    in.open("savedFile/"+fileName, ios::in);
     while (in >> type)
     {
         switch (type)

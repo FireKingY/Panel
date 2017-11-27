@@ -26,7 +26,8 @@ class Object
         void popVertex();
         void setColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat aphla);
         int id;
-        enum Type {CURVE, LINE, OVAL};       
+        enum Type {CURVE, LINE, OVAL};
+        enum State {WAIT, START};    
         Type type;         
 
     protected:
@@ -34,6 +35,7 @@ class Object
         vector<pff> vers;
         GLfloat color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
         bool needInitVers;
+        // State state;
         
 
 

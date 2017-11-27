@@ -4,6 +4,7 @@ TARGET = main.out
 CFLAGS = -std=c++11 -Wall
 LINKS = -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor
 OBJSDIR = .obj
+SAVEDDIR = savedFile
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJSDIR)/*.o $(CFLAGS) $(LINKS)
 $(OBJS):%.o:%.cpp
@@ -12,4 +13,4 @@ clean:
 	-$(RM) $(TARGET)
 	-$(RM) $(OBJSDIR)/*.o
 cleanPanel:
-	-$(RM) *.panel
+	-$(RM) $(SAVEDDIR)/*.panel
