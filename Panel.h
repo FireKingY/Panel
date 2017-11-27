@@ -7,6 +7,7 @@ class Panel
 {
     public:
         Panel(int width, int height);
+        ~Panel();
         void drawObjs();
         void add(Object* object);
         void drawLine();
@@ -15,6 +16,7 @@ class Panel
         void drawPoly(bool newVertex);
         void drawCurve();
         void moveObj();
+        void cleanScreen();
         void save(const string& fileName);
         void read(const string& fileName);
         void run(double mouseX, double mouseY);

@@ -13,6 +13,10 @@ Oval::Oval()
     type = OVAL;
     needInitVers = true;
 }
+Oval::~Oval()
+{
+}
+
 void Oval::setAB(GLfloat a, GLfloat b)
 {
     this->a = a;

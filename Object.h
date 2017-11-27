@@ -20,6 +20,7 @@ class Object
         virtual void draw();
 
         virtual void move(GLfloat x, GLfloat y);
+        virtual ~Object();
         bool selected(GLfloat x, GLfloat y, GLfloat r = 0.03f);
         void pushVertex(GLfloat x, GLfloat y);
         void popVertex();

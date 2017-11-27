@@ -5,6 +5,7 @@ Line::Line()
 {
     type = LINE;
 }
+Line::~Line(){};
 
 void Line::setVertexs(GLfloat* vertexs)
 {

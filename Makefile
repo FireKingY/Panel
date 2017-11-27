@@ -11,3 +11,5 @@ $(OBJS):%.o:%.cpp
 clean:
 	-$(RM) $(TARGET)
 	-$(RM) $(OBJSDIR)/*.o
+cleanPanel:
+	-$(RM) *.panel

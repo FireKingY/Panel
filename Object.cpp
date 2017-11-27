@@ -1,7 +1,10 @@
 #include "Object.h"
 #include <cmath>
 Object::Object():needInitVers(false){}
-
+Object::~Object()
+{
+    vers.clear();
+}
 void Object::readInfo(ifstream& in)
 {
     int size;
@@ -57,8 +60,8 @@ void Object::move(GLfloat x, GLfloat y)
 
 bool Object::selected(GLfloat x, GLfloat y, GLfloat r)
 {
-        cout<<id<<"-"<<x<<" "<<y<<" "<<r<<endl;;
-        static GLfloat a,b,c, x0;
+        // cout<<id<<"-"<<x<<" "<<y<<" "<<r<<endl;;
+        static GLfloat a,b,c,x0;
         if(needInitVers)
             initVers();
         int len = vers.size();
@@ -76,7 +79,7 @@ bool Object::selected(GLfloat x, GLfloat y, GLfloat r)
 
             len2 = (a*x+b*y+c)*(a*x+b*y+c)/(a*a+b*b);
             x0 = (b*b-a*b*y-a*c)/(a*a+b*b);
-            cout<<len2<<endl;
+            // cout<<len2<<endl;
             if(  len2 <=r2 && (x-vers[i].first)*(x-vers[i-1].first)<=0)
                 return true;
 

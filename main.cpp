@@ -25,6 +25,7 @@ int main()
     cout<<"3.圆"<<endl;
     cout<<"4.正多边形"<<endl;
     cout<<"5.任意多边形"<<endl;
+    cout<<"6.拖拽图形"<<endl;
     cout<<"8.保存数据"<<endl;
     cout<<"9.读取数据"<<endl;
     cout<<"c.重置画板"<<endl;

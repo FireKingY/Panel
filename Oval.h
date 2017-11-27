@@ -6,6 +6,7 @@ class Oval:public Object
     public:
         Oval(GLfloat x, GLfloat y, GLfloat a, GLfloat b, int VertexNum);
         Oval();
+        ~Oval();
         void initVers();
         void saveInfo(ofstream& out);
         void readInfo(ifstream& in);
