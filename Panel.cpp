@@ -211,4 +211,6 @@ void Panel::cleanScreen()
     for (auto obj : objects)
         delete obj;
     objects.clear();
+    delete moveCur;
+    delete drawCur;
 }
