@@ -5,13 +5,13 @@
 #include <fstream>
 using namespace std;
 
-Panel::Panel(int width, int height) : width(width), height(height), cnt(0),shapenum(0),id(-1),mouseX(0),mouseY(0),state(PANEL_NORMAL),drawCur(nullptr),moveCur(nullptr)
+Panel::Panel(int width, int height) : width(width), height(height), cnt(0),id(-1),mouseX(0),mouseY(0),state(PANEL_NORMAL),drawCur(nullptr),moveCur(nullptr),shapenum(0),DrawerNum(0)
 {
     loadPlugins();
     cout<<"s.保存数据"<<endl;
     cout<<"l.读取数据"<<endl;
     cout<<"c.清屏"<<endl;
-    // cout<<"esc.退出"<<endl;
+    cout<<"Esc.退出"<<endl;
 }
 Panel::~Panel()
 {
@@ -21,29 +21,70 @@ Panel::~Panel()
 void Panel::drawObjs()
 {
     static GLfloat x ,y;
-    for (auto object : objects)
+    for (auto shape : Shapes)
     {
-        if(object->state != Object::DONE && object->state != Object::CREATED)
+        if(shape->state != Shape::DONE && shape->state != Shape::CREATED)
         {
             transfer(mouseX, mouseY, x, y);
-            object->update(x,y);            
+            shape->update(x,y);            
         }
-        object->draw();        
+        // shape->draw();        
+        Drawers[0]->draw(shape);
     }
 }
 
-void Panel::addObj(Object *object)
+void Panel::addObj(Shape *Shape)
 {
-    objects.push_back(object);
-    object->id = ++cnt;
+    Shapes.push_back(Shape);
+    Shape->id = ++cnt;
 }
 
 void Panel::loadPlugins()
 {
+    loadShapes();
+    loadDrawers();
+    Drawers.push_back(DrawerCreators[DrawerNames[0]]());
+}
+
+void Panel::loadDrawers()
+{
+    cout<<"loading Drawers"<<endl;
+    FILE *in;
+    char buff[512];
+
+    if(!(in = popen("ls plugins/Drawer/*.so", "r"))){
+        return;
+    }
+
+    while(fgets(buff, sizeof(buff), in)!=NULL)
+    {
+        buff[strlen(buff)-1] = '\0';
+        void* handle = dlopen(buff, RTLD_LAZY);
+        if(!handle)
+        {
+            std::cerr <<dlerror()<<std::endl;
+            exit(1);
+        }
+        // cout<<((TypeFun)dlsym(handle, "type"))()<<endl;
+        DrawerNames.push_back(((TypeFun)dlsym(handle, "type"))());
+        ++DrawerNum;
+        cout<< DrawerNum <<"."<<DrawerNames[DrawerNum-1]<<endl;
+        DrawerCreator creator = (DrawerCreator)dlsym(handle, "create");
+        DrawerCreators[DrawerNames[DrawerNum-1]] = creator;
+    }
+    pclose(in);
+
+    return;
+}
+
+void Panel::loadShapes()
+{
+    cout<<"loading Shapes"<<endl;
+
     FILE *in;
 	char buff[512];
 
-	if(!(in = popen("ls plugins/*.so", "r"))){
+	if(!(in = popen("ls plugins/Shape/*.so", "r"))){
 		return;
 	}
     
@@ -56,11 +97,11 @@ void Panel::loadPlugins()
             std::cerr <<dlerror()<<std::endl;
             exit(1);
         }
-        objectNames.push_back(((TypeFun)dlsym(handle, "type"))());
+        ShapeNames.push_back(((TypeFun)dlsym(handle, "type"))());
         ++shapenum;
-        cout<< shapenum <<"."<<objectNames[shapenum-1]<<endl;
-        ObjectCreator creator = (ObjectCreator)dlsym(handle, "create");
-        objectCreators[objectNames[shapenum-1]] = creator;
+        cout<< shapenum <<"."<<ShapeNames[shapenum-1]<<endl;
+        ShapeCreator creator = (ShapeCreator)dlsym(handle, "create");
+        ShapeCreators[ShapeNames[shapenum-1]] = creator;
     }
 	pclose(in);
    
@@ -82,12 +123,18 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
         if(drawCur != nullptr)
         {
             drawCur->mouseClick(button, action);
-            if(drawCur->state == Object::DONE)
-                drawCur = nullptr;
+            if(drawCur->state == Shape::DONE)
+            {
+                cout<<"done"<<endl;
+                drawCur = nullptr; 
+            }  
         }
         else
         {
-            drawCur = objectCreators[objectNames[id]]();
+            if(action != GLFW_PRESS)
+                return;
+            cout<<"c"<<endl;
+            drawCur = ShapeCreators[ShapeNames[id]]();
             drawCur->mouseClick(button, action);
             drawCur->id=++cnt;
             addObj(drawCur);
@@ -99,7 +146,7 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
         GLfloat x, y;
         transfer(mouseX, mouseY, x, y);
         moveCur = nullptr;
-        for (auto obj : objects)
+        for (auto obj : Shapes)
         {
             if (obj->selected(x, y))
             {
@@ -124,7 +171,7 @@ void Panel::keyPressed(int key, int action)
             id =temp;
             drawCur = nullptr;
             state = PANEL_DRAW;
-            cout<<"切换至"<<objectNames[id]<<endl;
+            cout<<"切换至"<<ShapeNames[id]<<endl;
         }
 
         if(key == GLFW_KEY_M)
@@ -184,7 +231,7 @@ void Panel::save(const string &fileName)
 {
     ofstream out;
     out.open("savedFile/"+fileName, ios::out);
-    for (auto obj : objects)
+    for (auto obj : Shapes)
         obj->saveInfo(out);
 }
 
@@ -194,12 +241,12 @@ void Panel::read(const string &fileName)
     //TODO
     ifstream in;
     string type;
-    Object *obj;
+    Shape *obj;
 
     in.open("savedFile/"+fileName, ios::in);
     while (in >> type)
     {
-        obj = objectCreators[type]();
+        obj = ShapeCreators[type]();
         obj->readInfo(in);
         addObj(obj);
     }
@@ -208,9 +255,11 @@ void Panel::read(const string &fileName)
 
 void Panel::cleanScreen()
 {
-    for (auto obj : objects)
+    for (auto obj : Shapes)
         delete obj;
-    objects.clear();
-    delete moveCur;
-    delete drawCur;
+    Shapes.clear();
+    if(moveCur != nullptr)
+        delete moveCur;
+    if(drawCur != nullptr)
+        delete drawCur;
 }

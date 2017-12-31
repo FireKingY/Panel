@@ -1,7 +1,7 @@
 #pragma once
-#include "Object.h"
+#include "Shape.h"
 #include "Panel.h"
-class RegularPolygon:public Object
+class RegularPolygon:public Shape
 {
     public:
         RegularPolygon();

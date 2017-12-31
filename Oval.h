@@ -1,7 +1,7 @@
 #pragma once
-#include "Object.h"
+#include "Shape.h"
 
-class Oval:public Object
+class Oval:public Shape
 {
     public:
         Oval(GLfloat x, GLfloat y, GLfloat a, GLfloat b, int VertexNum);

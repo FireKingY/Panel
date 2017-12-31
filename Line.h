@@ -1,7 +1,7 @@
 #pragma once 
-#include "Object.h"
+#include "Shape.h"
 
-class Line: public Object
+class Line: public Shape
 {
     public:
         Line();

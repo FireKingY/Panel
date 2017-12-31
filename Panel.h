@@ -1,8 +1,9 @@
 #pragma once
-#include "Object.h"
+#include "Shape.h"
+#include "Drawer.h"
 #include <vector>
 #include <stack>
-#include "Object.h"
+#include "Shape.h"
 #include <map>
 
 class Panel
@@ -11,8 +12,10 @@ class Panel
     Panel(int width, int height);
     ~Panel();
     void loadPlugins();
+    void loadShapes();
+    void loadDrawers();
     void drawObjs();
-    void addObj(Object *object);
+    void addObj(Shape *Shape);
     void moveObj();
     void cleanScreen();
     void save(const string &fileName);
@@ -30,19 +33,25 @@ class Panel
     };
 
   private:
-    typedef Object *(*ObjectCreator)();
+    typedef Shape *(*ShapeCreator)();
+    typedef Drawer *(*DrawerCreator)();
     typedef string (*TypeFun)();
     int width;
     int height;
     int cnt;
-    int shapenum;
     int id;
     double mouseX;
     double mouseY; 
     State state;       
-    Object *drawCur;
-    Object *moveCur;
-    std::vector<Object *> objects;
-    vector<string> objectNames;
-    map<string, ObjectCreator> objectCreators;
+    Shape *drawCur;
+    Shape *moveCur;
+
+    int shapenum;
+    int DrawerNum;    
+    vector<Shape *> Shapes;
+    vector<Drawer *> Drawers;
+    vector<string> ShapeNames;
+    vector<string> DrawerNames;  
+    map<string, ShapeCreator> ShapeCreators;
+    map<string, DrawerCreator> DrawerCreators; 
 };

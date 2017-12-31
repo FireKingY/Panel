@@ -1,7 +1,7 @@
 #pragma once
-#include "Object.h"
+#include "Shape.h"
 #include "Panel.h"
-class Curve:public Object
+class Curve:public Shape
 {
     public:
         Curve();

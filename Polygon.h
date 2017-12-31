@@ -1,7 +1,7 @@
 #pragma once
-#include "Object.h"
+#include "Shape.h"
 
-class Polygon:public Object
+class Polygon:public Shape
 {
     public:
         Polygon();
