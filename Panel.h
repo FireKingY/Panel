@@ -1,10 +1,10 @@
 #pragma once
-#include "Shape.h"
 #include "Drawer.h"
 #include <vector>
 #include <stack>
 #include "Shape.h"
 #include <map>
+#include "Painter.h"
 
 class Panel
 {
@@ -45,9 +45,11 @@ class Panel
     State state;       
     Shape *drawCur;
     Shape *moveCur;
-
+    Painter painer;    
     int shapenum;
     int DrawerNum;    
+    int curDrawerId;
+    Painter painter;
     vector<Shape *> Shapes;
     vector<Drawer *> Drawers;
     vector<string> ShapeNames;

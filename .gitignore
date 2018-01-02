@@ -6,8 +6,10 @@ ToDoList
 *.d
 *.panel
 savedFile/*.*
-plugins/*.*
+plugins/Shape/*.*
+plugins/Drawer/*.*
 keng
 trash/*.*
 trash
 tags
+plugins

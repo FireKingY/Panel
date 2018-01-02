@@ -1,9 +1,9 @@
 CC = g++
-OBJS = main.o Panel.o Shape.o
+OBJS = main.o Panel.o Shape.o Painter.o
 BASE = Shape.cpp
 
 SHAPESOS = libLine.so libCurve.so libOval.so libPolygon.so libRegularPolygon.so 
-DRAWERSOS = libNormalDrawer.so
+DRAWERSOS = libNormalDrawer.so libDottedDrawer.so
 
 TARGET = main.out
 CFLAGS = -std=c++11 -Wall -g

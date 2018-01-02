@@ -30,10 +30,12 @@ class Shape
         enum State {CREATED ,WAIT, START,CLICKED, DONE};    
         string type;   
         State state;              
-
+        string DrawerName;
+        int DrawerId;
     // protected:
         typedef pair<GLfloat,GLfloat> pff;
         vector<pff> vers;
         GLfloat color[4] = {1.0f, 0.0f, 0.0f, 1.0f};
         bool needInitVers;
+
 };

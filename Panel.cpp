@@ -5,7 +5,7 @@
 #include <fstream>
 using namespace std;
 
-Panel::Panel(int width, int height) : width(width), height(height), cnt(0),id(-1),mouseX(0),mouseY(0),state(PANEL_NORMAL),drawCur(nullptr),moveCur(nullptr),shapenum(0),DrawerNum(0)
+Panel::Panel(int width, int height) : width(width), height(height), cnt(0),id(-1),mouseX(0),mouseY(0),state(PANEL_NORMAL),drawCur(nullptr),moveCur(nullptr),shapenum(0),DrawerNum(0),curDrawerId(0)
 {
     loadPlugins();
     cout<<"s.保存数据"<<endl;
@@ -29,7 +29,8 @@ void Panel::drawObjs()
             shape->update(x,y);            
         }
         // shape->draw();        
-        Drawers[0]->draw(shape);
+       // Drawers[0]->draw(shape);
+         painter.Paint(shape, Drawers);
     }
 }
 
@@ -43,7 +44,6 @@ void Panel::loadPlugins()
 {
     loadShapes();
     loadDrawers();
-    Drawers.push_back(DrawerCreators[DrawerNames[0]]());
 }
 
 void Panel::loadDrawers()
@@ -71,6 +71,7 @@ void Panel::loadDrawers()
         cout<< DrawerNum <<"."<<DrawerNames[DrawerNum-1]<<endl;
         DrawerCreator creator = (DrawerCreator)dlsym(handle, "create");
         DrawerCreators[DrawerNames[DrawerNum-1]] = creator;
+        Drawers.push_back(creator());
     }
     pclose(in);
 
@@ -125,7 +126,7 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
             drawCur->mouseClick(button, action);
             if(drawCur->state == Shape::DONE)
             {
-                cout<<"done"<<endl;
+               // cout<<"done"<<endl;
                 drawCur = nullptr; 
             }  
         }
@@ -133,10 +134,11 @@ void Panel::mouseClick(double mouseX, double mouseY, int button, int action)
         {
             if(action != GLFW_PRESS)
                 return;
-            cout<<"c"<<endl;
+            //cout<<"c"<<endl;
             drawCur = ShapeCreators[ShapeNames[id]]();
             drawCur->mouseClick(button, action);
             drawCur->id=++cnt;
+            drawCur->DrawerId=curDrawerId;
             addObj(drawCur);
         }
         return;
@@ -172,6 +174,10 @@ void Panel::keyPressed(int key, int action)
             drawCur = nullptr;
             state = PANEL_DRAW;
             cout<<"切换至"<<ShapeNames[id]<<endl;
+
+            cout<<"请输入DrawerId"<<endl;
+            cin>>curDrawerId;
+            curDrawerId--;
         }
 
         if(key == GLFW_KEY_M)
